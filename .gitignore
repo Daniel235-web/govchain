@@ -1,1 +1,31 @@
-target/
+# === Build outputs ===
+/target/
+/node/target/
+/runtime/target/
+/pallets/**/target/
+
+# === Rust specific ===
+**/*.rs.bk
+Cargo.lock
+*.rlib
+*.rmeta
+
+# === Substrate build artifacts ===
+*.wasm
+*.json
+*.node
+*.wasm.map
+
+# === IDE / Editor files ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Logs & temporary ===
+*.log
+*.tmp
