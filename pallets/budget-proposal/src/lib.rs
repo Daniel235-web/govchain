@@ -1,6 +1,10 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
+use scale_info::prelude::vec::Vec;
+
+pub mod weights;
+use crate::weights::WeightInfo;
 
 #[frame::pallet]
 pub mod pallet {
@@ -15,6 +19,8 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         /// The overarching event type of the runtime.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+
+        type WeightInfo: WeightInfo;
     }
 
     #[pallet::event]
@@ -115,7 +121,7 @@ pub mod pallet {
         ///
         /// Emits `BudgetProposalCreated` event when successful.
         #[pallet::call_index(0)]
-        #[pallet::weight(0)]
+        #[pallet::weight(T::WeightInfo::create_proposal())] 
         pub fn create_proposal(
             origin: OriginFor<T>,
             amount: u128,
@@ -171,7 +177,7 @@ pub mod pallet {
         ///
         /// Emits `BudgetProposalApproved` event when successful.
         #[pallet::call_index(1)]
-        #[pallet::weight(0)]
+        #[pallet::weight(T::WeightInfo::approve_proposal())] 
         pub fn approve_proposal(
             origin: OriginFor<T>,
             proposal_id: u64,
@@ -217,7 +223,7 @@ pub mod pallet {
         ///
         /// Emits `BudgetProposalRejected` event when successful.
         #[pallet::call_index(2)]
-        #[pallet::weight(0)]
+        #[pallet::weight(T::WeightInfo::reject_proposal())] 
         pub fn reject_proposal(
             origin: OriginFor<T>,
             proposal_id: u64,
@@ -265,3 +271,13 @@ pub mod pallet {
         }
     }
 }
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+
+

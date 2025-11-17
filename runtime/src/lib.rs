@@ -313,6 +313,23 @@ mod runtime {
 	// Template
 	#[runtime::pallet_index(50)]
 	pub type TemplatePallet = pallet_parachain_template;
+
+	#[runtime::pallet_index(51)]
+    pub type Utility = pallet_utility;
+	
+    #[runtime::pallet_index(52)]
+    pub type AuditLog = audit_log;
+
+    #[runtime::pallet_index(53)]
+    pub type BudgetProposal = budget_proposal;
+
+    #[runtime::pallet_index(54)]
+    pub type CommunityVoting = community_voting;
+
+    #[runtime::pallet_index(55)]
+    pub type GovernmentWallet = government_wallet;
+
+  
 }
 
 #[docify::export(register_validate_block)]

@@ -1,5 +1,5 @@
 [package]
-name = "pallet-government-wallet"
+name = "government-wallet"
 version = "0.1.0"
 description = "Government wallet management pallet for GovChain"
 license.workspace = true
@@ -16,3 +16,4 @@ frame = { features = ["experimental", "runtime"], workspace = true }
 [features]
 default = ["std"]
 std = ["codec/std", "frame/std", "scale-info/std"]
+runtime-benchmarks = ["frame/runtime-benchmarks"]

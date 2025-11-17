@@ -1,6 +1,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
+use scale_info::prelude::vec::Vec;
+
+pub mod weights;
+use crate::weights::WeightInfo;
+
 
 #[frame::pallet]
 pub mod pallet {
@@ -15,6 +20,8 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         /// The overarching event type of the runtime.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+
+        type WeightInfo: WeightInfo;
     }
 
     #[pallet::event]
@@ -37,7 +44,7 @@ pub mod pallet {
             purpose: Vec<u8>,
         },
     }
-        /// Storage for government wallets and their metadata.
+    /// Storage for government wallets and their metadata.
     #[pallet::storage]
     pub type GovernmentWallets<T: Config> = StorageMap<
         _,
@@ -87,7 +94,7 @@ pub mod pallet {
         ///
         /// Emits `GovernmentWalletCreated` event when successful.
         #[pallet::call_index(0)]
-        #[pallet::weight(0)]
+        #[pallet::weight(T::WeightInfo::create_wallet())] 
         pub fn create_wallet(
             origin: OriginFor<T>,
             wallet_id: T::AccountId,
@@ -96,14 +103,17 @@ pub mod pallet {
             let creator = ensure_signed(origin)?;
 
             // Check if department name is valid
-            ensure!(!department.is_empty(), Error::<T>::InvalidDepartment);
-            ensure!(department.len() <= 100, Error::<T>::InvalidDepartment);
+            if department.is_empty() {
+                return Err(Error::<T>::InvalidDepartment.into());
+            }
+            if department.len() > 100 {
+                return Err(Error::<T>::InvalidDepartment.into());
+            }
 
             // Check if wallet already exists
-            ensure!(
-                !GovernmentWallets::<T>::contains_key(&wallet_id),
-                Error::<T>::WalletAlreadyExists
-            );
+            if GovernmentWallets::<T>::contains_key(&wallet_id) {
+                return Err(Error::<T>::WalletAlreadyExists.into());
+            }
 
             // Get current block number and convert to u64
             let current_block = frame_system::Pallet::<T>::block_number();
@@ -134,8 +144,7 @@ pub mod pallet {
 
             Ok(())
         }
-
-        /// Allocate funds to a government wallet.
+            /// Allocate funds to a government wallet.
         ///
         /// The dispatch origin must be signed.
         ///
@@ -145,20 +154,19 @@ pub mod pallet {
         ///
         /// Emits `FundsAllocated` event when successful.
         #[pallet::call_index(1)]
-        #[pallet::weight(0)]
+        #[pallet::weight(T::WeightInfo::allocate_funds())] 
         pub fn allocate_funds(
             origin: OriginFor<T>,
             wallet_id: T::AccountId,
             amount: u128,
             purpose: Vec<u8>,
         ) -> DispatchResult {
-            let _from = ensure_signed(origin)?; // Fixed: prefix with underscore
+            let _from = ensure_signed(origin)?;
 
             // Check if wallet exists
-            ensure!(
-                GovernmentWallets::<T>::contains_key(&wallet_id),
-                Error::<T>::WalletDoesNotExist
-            );
+            if !GovernmentWallets::<T>::contains_key(&wallet_id) {
+                return Err(Error::<T>::WalletDoesNotExist.into());
+            }
 
             // Update wallet balance
             WalletBalances::<T>::mutate(&wallet_id, |balance| {
@@ -176,3 +184,13 @@ pub mod pallet {
         }
     }
 }
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+
+

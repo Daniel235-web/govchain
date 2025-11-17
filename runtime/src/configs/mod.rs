@@ -57,6 +57,7 @@ use sp_version::RuntimeVersion;
 use xcm::latest::prelude::BodyId;
 
 // Local module imports
+use super::OriginCaller;
 use super::{
 	weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight},
 	AccountId, Aura, Balance, Balances, Block, BlockNumber, CollatorSelection, ConsensusHook, Hash,
@@ -320,4 +321,36 @@ impl pallet_collator_selection::Config for Runtime {
 impl pallet_parachain_template::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_parachain_template::weights::SubstrateWeight<Runtime>;
+}
+// Configure utility pallet.
+impl pallet_utility::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type RuntimeCall = RuntimeCall;
+    type PalletsOrigin = OriginCaller;
+    type WeightInfo = pallet_utility::weights::SubstrateWeight<Runtime>;
+}
+
+// Configure audit-log pallet
+impl audit_log::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = audit_log::weights::SubstrateWeight<Runtime>;
+}
+
+// Configure budget-proposal pallet
+impl budget_proposal::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = budget_proposal::weights::SubstrateWeight<Runtime>;
+
+}
+
+impl community_voting::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = community_voting::weights::SubstrateWeight<Runtime>;
+}
+
+
+// Configure government-wallet pallet
+impl government_wallet::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = government_wallet::weights::SubstrateWeight<Runtime>;
 }

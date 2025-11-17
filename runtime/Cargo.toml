@@ -23,10 +23,14 @@ docify = { workspace = true }
 hex-literal = { optional = true, workspace = true, default-features = true }
 log = { workspace = true }
 pallet-parachain-template.workspace = true
-polkadot-sdk = { workspace = true, features = ["cumulus-pallet-aura-ext", "cumulus-pallet-session-benchmarking", "cumulus-pallet-weight-reclaim", "cumulus-pallet-xcm", "cumulus-pallet-xcmp-queue", "cumulus-primitives-aura", "cumulus-primitives-core", "cumulus-primitives-utility", "pallet-aura", "pallet-authorship", "pallet-balances", "pallet-collator-selection", "pallet-message-queue", "pallet-session", "pallet-sudo", "pallet-timestamp", "pallet-transaction-payment", "pallet-transaction-payment-rpc-runtime-api", "pallet-xcm", "parachains-common", "polkadot-parachain-primitives", "polkadot-runtime-common", "runtime", "staging-parachain-info", "staging-xcm", "staging-xcm-builder", "staging-xcm-executor"], default-features = false }
+polkadot-sdk = { workspace = true, features = ["pallet-utility","cumulus-pallet-aura-ext", "cumulus-pallet-session-benchmarking", "cumulus-pallet-weight-reclaim", "cumulus-pallet-xcm", "cumulus-pallet-xcmp-queue", "cumulus-primitives-aura", "cumulus-primitives-core", "cumulus-primitives-utility", "pallet-aura", "pallet-authorship", "pallet-balances", "pallet-collator-selection", "pallet-message-queue", "pallet-session", "pallet-sudo", "pallet-timestamp", "pallet-transaction-payment", "pallet-transaction-payment-rpc-runtime-api", "pallet-xcm", "parachains-common", "polkadot-parachain-primitives", "polkadot-runtime-common", "runtime", "staging-parachain-info", "staging-xcm", "staging-xcm-builder", "staging-xcm-executor"], default-features = false }
 scale-info = { features = ["derive"], workspace = true }
 serde_json = { workspace = true, default-features = false, features = ["alloc"] }
 smallvec = { workspace = true, default-features = true }
+audit-log = { path = "../pallets/audit-log", default-features = false }
+budget-proposal = { path = "../pallets/budget-proposal", default-features = false }
+community-voting = { path = "../pallets/community-voting", default-features = false }
+government-wallet = { path = "../pallets/government-wallet", default-features = false }
 
 [features]
 default = ["std"]
@@ -39,6 +43,10 @@ std = [
 	"scale-info/std",
 	"serde_json/std",
 	"substrate-wasm-builder",
+	"audit-log/std",
+    "budget-proposal/std", 
+    "community-voting/std",
+    "government-wallet/std",
 ]
 
 runtime-benchmarks = [
@@ -46,6 +54,10 @@ runtime-benchmarks = [
 	"hex-literal",
 	"pallet-parachain-template/runtime-benchmarks",
 	"polkadot-sdk/runtime-benchmarks",
+	"audit-log/runtime-benchmarks",
+    "budget-proposal/runtime-benchmarks",
+    "community-voting/runtime-benchmarks", 
+    "government-wallet/runtime-benchmarks",
 ]
 
 try-runtime = [

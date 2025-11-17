@@ -8,7 +8,7 @@ edition = "2021"
 [workspace]
 default-members = ["pallets/template", "runtime"]
 members = [
-    "node", "pallets/government-wallet",
+    "node", "pallets/audit-log", "pallets/budget-proposal", "pallets/community-voting", "pallets/government-wallet",
     "pallets/template",
     "runtime",
 ]
