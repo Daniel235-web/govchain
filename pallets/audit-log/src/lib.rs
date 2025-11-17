@@ -1,6 +1,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
+use scale_info::prelude::vec::Vec;
+
+
+pub mod weights;
+use crate::weights::WeightInfo;
 
 #[frame::pallet]
 pub mod pallet {
@@ -15,6 +20,8 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         /// The overarching event type of the runtime.
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+
+        type WeightInfo: WeightInfo;
     }
 
     #[pallet::event]
@@ -84,7 +91,7 @@ pub mod pallet {
         ///
         /// Emits `AuditEntryCreated` event when successful.
         #[pallet::call_index(0)]
-        #[pallet::weight(0)]
+        #[pallet::weight(T::WeightInfo::log_activity())] 
         pub fn log_activity(
             origin: OriginFor<T>,
             activity_type: Vec<u8>,
@@ -144,7 +151,7 @@ pub mod pallet {
         ///
         /// This is a read-only function that doesn't modify state.
         #[pallet::call_index(1)]
-        #[pallet::weight(0)]
+        #[pallet::weight(T::WeightInfo::get_audit_entry())] 
         pub fn get_audit_entry(
             origin: OriginFor<T>,
             entry_id: u64,
@@ -162,3 +169,14 @@ pub mod pallet {
         }
     }
 }
+#[cfg(test)]
+mod mock;
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+
+
+
