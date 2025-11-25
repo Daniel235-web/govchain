@@ -570,14 +570,7 @@ This project is licensed under the MIT-0 License - see the [LICENSE](./LICENSE) 
 
 ---
 
-## 📞 Contact & Support
 
-- 📧 **Email**: contact@govchain.dev
-- 🐦 **Twitter**: [@GovChainIO](https://twitter.com/govchain)
-- 💬 **Discord**: [Join Community](https://discord.gg/govchain)
-- 📖 **Docs**: [docs.govchain.dev](https://docs.govchain.dev)
-
----
 
 ## 🎯 Hackathon Submission
 
